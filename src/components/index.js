@@ -1,1 +1,1 @@
-export { default as Counter } from '@components/Counter.svelte';
+export { default as Login } from "@/components/Login.svelte";

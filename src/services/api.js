@@ -13,4 +13,8 @@ const getAccount = async () => {
   return axios.get("/athlete");
 };
 
-export { getAccount };
+const getActivities = async () => {
+  return axios.get(`/athlete/activities`);
+};
+
+export { getAccount, getActivities };

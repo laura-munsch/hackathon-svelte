@@ -1,5 +1,5 @@
 <script>
-  import { Login } from "@/components";
+  import { Activities, Login } from "@/components";
   import { accountStore } from "@/stores";
 
   let firstname;
@@ -9,7 +9,9 @@
 
 <main>
   {#if firstname}
-    <p>Bienvenue {firstname}</p>
+    <h1>Bienvenue {firstname}</h1>
+
+    <Activities />
   {:else}
     <Login />
   {/if}

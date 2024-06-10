@@ -4,17 +4,19 @@
 
   let value = "";
 
-  const handleSubmit = async () => {
-    apiKeyStore.update(() => value);
-    const { data } = await getAccount();
-    updateAccountStore(data);
+  const handleSubmit = () => {
+    apiKeyStore.set(value);
+    loadAccount();
   };
 
-  const updateAccountStore = (data) => {
-    accountStore.update(() => ({
-      firstname: data.firstname,
-      picture: data.profile,
-    }));
+  const loadAccount = async () => {
+    const { data } = await getAccount();
+    if (data) {
+      accountStore.set({
+        firstname: data.firstname,
+        picture: data.profile,
+      });
+    }
   };
 </script>
 

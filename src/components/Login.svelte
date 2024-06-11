@@ -1,30 +1,31 @@
 <script>
-  import { accountStore, apiKeyStore } from "@/stores";
-  import { getAccount } from "@/services/api";
+  import { onMount } from "svelte";
 
-  let value = "";
+  import { authStore } from "@/stores";
+  import { authorizationUrl, getAuthToken } from "@/services/api";
 
-  const handleSubmit = () => {
-    apiKeyStore.set(value);
-    loadAccount();
+  onMount(() => getCodeFromUrl());
+
+  const getCodeFromUrl = () => {
+    const params = new URLSearchParams(window.location.search);
+    const code = params?.get("code");
+
+    if (code) {
+      authenticateUser(code);
+    }
   };
 
-  const loadAccount = async () => {
-    const { data } = await getAccount();
+  const authenticateUser = async (code) => {
+    const { data } = await getAuthToken(code);
+
     if (data) {
-      accountStore.set({
-        firstname: data.firstname,
-        picture: data.profile,
+      authStore.set({
+        accessToken: data.access_token,
+        firstname: data.athlete.firstname,
+        picture: data.athlete.profile,
       });
     }
   };
 </script>
 
-<form on:submit|preventDefault={handleSubmit}>
-  <label>
-    Clé API Strava
-    <input bind:value type="text" />
-  </label>
-
-  <button type="submit">Ok</button>
-</form>
+<a href={authorizationUrl}> Autoriser la connexion avec Strava </a>

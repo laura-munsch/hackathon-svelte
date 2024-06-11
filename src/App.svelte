@@ -1,10 +1,10 @@
 <script>
   import { Activities, Login } from "@/components";
-  import { accountStore } from "@/stores";
+  import { authStore } from "@/stores";
 
   let firstname;
 
-  accountStore.subscribe((value) => (firstname = value.firstname));
+  authStore.subscribe((user) => (firstname = user.firstname));
 </script>
 
 <main>

@@ -8,7 +8,9 @@
 
   const loadActivities = async () => {
     const { data } = await getActivities();
-    if (data) activities = data;
+    if (data) {
+      activities = data.filter((activity) => activity.type == "Ride");
+    }
     console.log(activities);
   };
 

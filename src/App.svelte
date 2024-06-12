@@ -21,7 +21,7 @@
         <img
           src={picture}
           alt="Portrait de {firstname}"
-          class="rounded-full w-24 h-24"
+          class="rounded-full w-24 h-24 animate-spin profile-picture"
         />
       {/if}
     </div>
@@ -31,3 +31,9 @@
     <Login />
   {/if}
 </main>
+
+<style lang="scss">
+  .profile-picture {
+    animation-duration: 10s;
+  }
+</style>

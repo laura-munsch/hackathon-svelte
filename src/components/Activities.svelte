@@ -2,14 +2,22 @@
   import { getActivities } from "@/services/api";
   import { onMount } from "svelte";
 
-  let activities;
+  let activities = [];
+  let showPrivate = true;
+  let page = 1;
+  let loading = true;
 
   onMount(() => loadActivities());
 
   const loadActivities = async () => {
-    const { data } = await getActivities();
+    console.log("load activities");
+    const { data } = await getActivities(page);
     if (data) {
-      activities = data.filter((activity) => activity.type == "Ride");
+      activities = [
+        ...activities,
+        ...data.filter((activity) => activity.type == "Ride"),
+      ];
+      loading = false;
     }
     console.log(activities);
   };
@@ -27,18 +35,37 @@
   const distance = (activity) => {
     return Math.floor(activity.distance / 500);
   };
+
+  const handleScroll = (e) => {
+    const documentHeight = document.body.scrollHeight - window.innerHeight;
+
+    if (window.scrollY >= documentHeight - 200 && !loading) {
+      loading = true;
+      page++;
+      loadActivities();
+    }
+  };
 </script>
 
-{#if activities}
+<svelte:window on:scroll={handleScroll} />
+
+{#if activities.length > 1}
+  <label
+    class="bg-purple-300 text-purple-900 px-4 py-2 rounded-full fixed left-4 bottom-4"
+  >
+    <input type="checkbox" bind:checked={showPrivate} />
+    Afficher les activités privées ?
+  </label>
+
   <section class="flex flex-col items-center gap-4">
     {#each activities as activity}
-      <div class="relative">
+      <div class="relative {activity.private && !showPrivate ? 'hidden' : ''}">
         <div
           class="activity"
-          style="width: {distance(activity)}px; height: {distance(
-            activity
-          )}px; opacity: {speed(activity)}%;
-            10}% 0% 0%);"
+          style="
+            width: {distance(activity)}px;
+            height: {distance(activity)}px;
+            opacity: {speed(activity)}%;"
         >
           <div
             class="activity__elevation-gain"

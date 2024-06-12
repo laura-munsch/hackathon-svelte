@@ -28,4 +28,11 @@
   };
 </script>
 
-<a href={authorizationUrl}> Autoriser la connexion avec Strava </a>
+<div class="text-center">
+  <a
+    href={authorizationUrl}
+    class="bg-purple-800 text-white px-6 py-4 rounded-full hover:bg-purple-700"
+  >
+    Autoriser la connexion avec Strava 🚀
+  </a>
+</div>

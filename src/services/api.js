@@ -29,8 +29,13 @@ const getAuthToken = async (code) => {
   });
 };
 
-const getActivities = async () => {
-  return axios.get(`/athlete/activities`);
+const getActivities = async (page) => {
+  return axios.get(`/athlete/activities`, {
+    params: {
+      page,
+      per_page: 50,
+    },
+  });
 };
 
 export { authorizationUrl, getAuthToken, getActivities };

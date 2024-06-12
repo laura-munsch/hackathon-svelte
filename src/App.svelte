@@ -11,9 +11,11 @@
   });
 </script>
 
-<main>
+<main class="w-full h-full">
   {#if firstname}
-    <div class="p-4 flex justify-between items-center">
+    <div
+      class="flex justify-between items-center bg-purple-100 text-purple-800 rounded-full pl-8 mb-8"
+    >
       <h1 class="text-2xl">Bienvenue {firstname}</h1>
       {#if picture}
         <img

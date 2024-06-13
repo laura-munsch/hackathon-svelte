@@ -5,32 +5,29 @@
   import { translatedMonths } from "@/constants";
   import { getActivities } from "@/services/api";
 
-  let activities = {};
+  let activities = [];
   let showPrivate = false;
   let page = 1;
   let loading = true;
 
   onMount(() => loadActivities());
 
+  $: activitiesByMonth = () => {
+    // groupe activities by month
+    return Object.groupBy(activities, (activity) => {
+      const date = new Date(activity.start_date);
+      return `${translatedMonths[date.getMonth()]} ${date.getFullYear()}`;
+    });
+  };
+
   const loadActivities = async () => {
     const { data } = await getActivities(page);
 
     if (data) {
-      let newActivities = Object.groupBy(
-        // only display cycling activities
-        data.filter((activity) => activity.type == "Ride"),
-        (activity) => {
-          // groupe activities by month
-          const date = new Date(activity.start_date);
-          return `${translatedMonths[date.getMonth()]} ${date.getFullYear()}`;
-        }
-      );
+      // only display cycling activities
+      let newActivities = data.filter((activity) => activity.type == "Ride");
 
-      activities = {
-        ...activities,
-        ...newActivities,
-      };
-
+      activities = [...activities, ...newActivities];
       loading = false;
     }
   };
@@ -60,12 +57,12 @@
 </label>
 
 <section class="flex flex-col items-center gap-4">
-  {#each Object.keys(activities) as activityKey}
+  {#each Object.keys(activitiesByMonth()) as activityKey}
     <h2 class="text-xl my-4 text-purple-500">
       {activityKey}
     </h2>
 
-    {#each activities[activityKey] as activity}
+    {#each activitiesByMonth()[activityKey] as activity}
       <Activity {activity} {showPrivate} />
     {/each}
   {/each}
